@@ -29,10 +29,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit(),
+      create: (context) {
+        final cubit = HomeCubit();
+        cubit.getHomeData();
+        return cubit;
+      },
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             children: [
               SafeArea(

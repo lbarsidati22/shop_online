@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_online/utils/app_router.dart';
 import 'package:shop_online/views/pages/custtom_bottom_navBar.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const CusttomBottomNavbarPage(),
+      onGenerateRoute: AppRouter.onGenariteRoute,
     );
   }
 }
