@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       create: (context) => HomeCubit(),
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
           child: Column(
             children: [
               SafeArea(
