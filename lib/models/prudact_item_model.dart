@@ -1,3 +1,10 @@
+enum PrudactSize {
+  S,
+  M,
+  L,
+  XL,
+}
+
 class PrudactItemModel {
   final String name;
   final String id;
@@ -6,7 +13,13 @@ class PrudactItemModel {
   final double price;
   final bool isFavorite;
   final String category;
+  final double avrageRate;
+  final int quantity;
+  final PrudactSize? size;
   PrudactItemModel({
+    this.size,
+    this.quantity = 1,
+    this.avrageRate = 4.5,
     required this.name,
     required this.id,
     required this.imgUrl,
@@ -16,6 +29,32 @@ class PrudactItemModel {
     this.isFavorite = false,
     required this.category,
   });
+
+  PrudactItemModel copyWith({
+    String? name,
+    String? id,
+    String? imgUrl,
+    String? description,
+    double? price,
+    bool? isFavorite,
+    String? category,
+    double? avrageRate,
+    int? quantity,
+    PrudactSize? size,
+  }) {
+    return PrudactItemModel(
+      size: size ?? this.size,
+      name: name ?? this.name,
+      id: id ?? this.id,
+      imgUrl: imgUrl ?? this.imgUrl,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      isFavorite: isFavorite ?? this.isFavorite,
+      category: category ?? this.category,
+      avrageRate: avrageRate ?? this.avrageRate,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 List<PrudactItemModel> dummyProducts = [

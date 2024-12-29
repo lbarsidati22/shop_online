@@ -17,4 +17,26 @@ class PrudactDetailsCubit extends Cubit<PrudactDetailsState> {
       },
     );
   }
+
+  void incrementCounter(String prudactId) {
+    final selectedIindex =
+        dummyProducts.indexWhere((item) => item.id == prudactId);
+    dummyProducts[selectedIindex] = dummyProducts[selectedIindex].copyWith(
+      quantity: dummyProducts[selectedIindex].quantity + 1,
+    );
+    emit(
+      QuantityCounterLoaded(value: dummyProducts[selectedIindex].quantity),
+    );
+  }
+
+  void decrementCounter(String prudactId) {
+    final selectedIindex =
+        dummyProducts.indexWhere((item) => item.id == prudactId);
+    dummyProducts[selectedIindex] = dummyProducts[selectedIindex].copyWith(
+      quantity: dummyProducts[selectedIindex].quantity - 1,
+    );
+    emit(
+      QuantityCounterLoaded(value: dummyProducts[selectedIindex].quantity),
+    );
+  }
 }

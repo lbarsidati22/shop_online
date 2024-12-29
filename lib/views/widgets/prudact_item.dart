@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_online/models/prudact_item_model.dart';
+import 'package:shop_online/utils/app_colors.dart';
 
 class PrudactItem extends StatelessWidget {
   final PrudactItemModel prudactItemModel;
@@ -16,7 +17,7 @@ class PrudactItem extends StatelessWidget {
               width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: Colors.grey.shade200,
+                color: AppColors.grey2,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

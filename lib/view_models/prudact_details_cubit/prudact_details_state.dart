@@ -21,3 +21,9 @@ final class PrudactDetailsErrror extends PrudactDetailsState {
     required this.message,
   });
 }
+
+final class QuantityCounterLoaded extends PrudactDetailsState {
+  final int value;
+
+  QuantityCounterLoaded({required this.value});
+}
