@@ -79,7 +79,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
       hideNavigationBarWhenKeyboardAppears: true,
       // popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
       padding: const EdgeInsets.only(top: 7, bottom: 5),
-      // backgroundColor: Colors.grey.shade900,
+      //backgroundColor: Colors.grey.shade900,
       isVisible: true,
       animationSettings: const NavBarAnimationSettings(
         navBarItemAnimation: ItemAnimationSettings(
