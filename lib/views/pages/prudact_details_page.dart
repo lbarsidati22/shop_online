@@ -209,14 +209,28 @@ class PrudactDetailsPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '\$${prudact.price}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
+                              Text.rich(
+                                TextSpan(
+                                  text: '\$',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.prymaryColor,
+                                      ),
+                                  children: [
+                                    TextSpan(
+                                      text: '${prudact.price}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
+                                  ],
+                                ),
                               ),
                               ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(

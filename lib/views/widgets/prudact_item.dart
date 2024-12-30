@@ -8,13 +8,14 @@ class PrudactItem extends StatelessWidget {
   const PrudactItem({super.key, required this.prudactItemModel});
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
       children: [
         Stack(
           children: [
             Container(
-              height: 120,
-              width: 200,
+              height: size.height * 0.15,
+              width: size.height * 0.3,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: AppColors.grey2,

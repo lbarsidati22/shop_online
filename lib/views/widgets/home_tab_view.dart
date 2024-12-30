@@ -14,6 +14,7 @@ class HomeTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return BlocBuilder<HomeCubit, HomeState>(
       bloc: BlocProvider.of<HomeCubit>(context),
       builder: (context, state) {
@@ -48,8 +49,8 @@ class HomeTabView extends StatelessWidget {
                   },
                   options: FlutterCarouselOptions(
                     autoPlay: false,
-                    height: 160.0,
-                    showIndicator: true,
+                    height: size.height * 0.19,
+                    //  showIndicator: false,
                     slideIndicator: CircularWaveSlideIndicator(),
                   ),
                 ),
@@ -75,15 +76,15 @@ class HomeTabView extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: size.height * 0.01),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: state.prudacts.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 10,
+                    mainAxisSpacing: size.height * 0.01,
+                    crossAxisSpacing: size.height * 0.014,
                   ),
                   itemBuilder: (context, index) {
                     return InkWell(
