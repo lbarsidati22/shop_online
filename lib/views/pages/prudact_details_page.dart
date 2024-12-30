@@ -16,9 +16,13 @@ class PrudactDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final cubit = BlocProvider.of<PrudactDetailsCubit>(context);
     return BlocBuilder<PrudactDetailsCubit, PrudactDetailsState>(
-      bloc: BlocProvider.of<PrudactDetailsCubit>(context),
-      buildWhen: (previous, current) => current is! QuantityCounterLoaded,
+      bloc: cubit,
+      buildWhen: (previous, current) =>
+          current is PrudactDetailsLeading ||
+          current is PrudactDetailsLoaded ||
+          current is PrudactDetailsErrror,
       builder: (context, state) {
         if (state is PrudactDetailsLeading) {
           return Scaffold(
@@ -121,8 +125,7 @@ class PrudactDetailsPage extends StatelessWidget {
                               ),
                               BlocBuilder<PrudactDetailsCubit,
                                   PrudactDetailsState>(
-                                bloc: BlocProvider.of<PrudactDetailsCubit>(
-                                    context),
+                                bloc: cubit,
                                 buildWhen: (previous, current) =>
                                     current is QuantityCounterLoaded ||
                                     current is PrudactDetailsLoaded,
@@ -130,18 +133,14 @@ class PrudactDetailsPage extends StatelessWidget {
                                   if (state is QuantityCounterLoaded) {
                                     return CounterWidget(
                                       prudactId: prudact.id,
-                                      cubit:
-                                          BlocProvider.of<PrudactDetailsCubit>(
-                                              context),
+                                      cubit: cubit,
                                       value: state.value,
                                     );
                                   } else if (state is PrudactDetailsLoaded) {
                                     return CounterWidget(
                                       prudactId: prudact.id,
-                                      cubit:
-                                          BlocProvider.of<PrudactDetailsCubit>(
-                                              context),
-                                      value: state.prudacts.quantity,
+                                      cubit: cubit,
+                                      value: 1,
                                     );
                                   } else {
                                     return SizedBox.shrink();
@@ -160,28 +159,56 @@ class PrudactDetailsPage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
-                          Row(
-                            children: PrudactSize.values
-                                .map(
-                                  (size) => Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 4.0, right: 6.0),
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.grey2,
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(12),
-                                          child: Text(size.name.toString()),
+                          BlocBuilder<PrudactDetailsCubit, PrudactDetailsState>(
+                            bloc: cubit,
+                            buildWhen: (previous, current) =>
+                                current is SizeSelected ||
+                                current is PrudactDetailsLoaded,
+                            builder: (context, state) {
+                              return Row(
+                                children: PrudactSize.values
+                                    .map(
+                                      (size) => Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 4.0, right: 6.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (state is SizeSelected) {}
+                                            cubit.selectSize(size);
+                                          },
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: state is SizeSelected &&
+                                                      state.size == size
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : AppColors.grey2,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(12),
+                                              child: Text(
+                                                size.name.toString(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium!
+                                                    .copyWith(
+                                                      color:
+                                                          state is SizeSelected &&
+                                                                  state.size ==
+                                                                      size
+                                                              ? AppColors.white
+                                                              : AppColors.black,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
+                                    )
+                                    .toList(),
+                              );
+                            },
                           ),
                           SizedBox(height: 16),
                           Text(
@@ -232,24 +259,80 @@ class PrudactDetailsPage extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 16,
-                                  ),
-                                  backgroundColor: AppColors.prymaryColor,
-                                  foregroundColor: AppColors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                ),
-                                icon: Icon(
-                                  Icons.shopping_bag_rounded,
-                                  color: AppColors.white,
-                                ),
-                                onPressed: () {},
-                                label: Text('add to cart'),
+                              BlocBuilder<PrudactDetailsCubit,
+                                  PrudactDetailsState>(
+                                bloc: cubit,
+                                buildWhen: (previous, current) =>
+                                    current is PrudactAdedToCart ||
+                                    current is PrudactAddingToCart,
+                                builder: (context, state) {
+                                  if (state is PrudactAddingToCart) {
+                                    return ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 12,
+                                        ),
+                                        backgroundColor: AppColors.prymaryColor,
+                                        foregroundColor: AppColors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        ),
+                                      ),
+                                      onPressed: null,
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    );
+                                  } else if (state is PrudactAdedToCart) {
+                                    return ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 12,
+                                        ),
+                                        backgroundColor: AppColors.prymaryColor,
+                                        foregroundColor: AppColors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        ),
+                                      ),
+                                      onPressed: null,
+                                      child: Text('Aded to Cart'),
+                                    );
+                                  }
+                                  return ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 12,
+                                      ),
+                                      backgroundColor: AppColors.prymaryColor,
+                                      foregroundColor: AppColors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                    ),
+                                    icon: Icon(
+                                      Icons.shopping_bag_rounded,
+                                      color: AppColors.white,
+                                    ),
+                                    onPressed: () {
+                                      if (cubit.selectedSize != null) {
+                                        cubit.addToCart(prudact.id);
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text('Please Select Size'),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    label: Text('add to cart'),
+                                  );
+                                },
                               ),
                             ],
                           ),

@@ -27,3 +27,21 @@ final class QuantityCounterLoaded extends PrudactDetailsState {
 
   QuantityCounterLoaded({required this.value});
 }
+
+final class SizeSelected extends PrudactDetailsState {
+  final PrudactSize size;
+
+  SizeSelected({
+    required this.size,
+  });
+}
+
+final class PrudactAdedToCart extends PrudactDetailsState {
+  final String prudactId;
+
+  PrudactAdedToCart({
+    required this.prudactId,
+  });
+}
+
+final class PrudactAddingToCart extends PrudactDetailsState {}

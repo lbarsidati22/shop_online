@@ -14,11 +14,8 @@ class PrudactItemModel {
   final bool isFavorite;
   final String category;
   final double avrageRate;
-  final int quantity;
-  final PrudactSize? size;
+
   PrudactItemModel({
-    this.size,
-    this.quantity = 1,
     this.avrageRate = 4.5,
     required this.name,
     required this.id,
@@ -39,11 +36,8 @@ class PrudactItemModel {
     bool? isFavorite,
     String? category,
     double? avrageRate,
-    int? quantity,
-    PrudactSize? size,
   }) {
     return PrudactItemModel(
-      size: size ?? this.size,
       name: name ?? this.name,
       id: id ?? this.id,
       imgUrl: imgUrl ?? this.imgUrl,
@@ -52,7 +46,6 @@ class PrudactItemModel {
       isFavorite: isFavorite ?? this.isFavorite,
       category: category ?? this.category,
       avrageRate: avrageRate ?? this.avrageRate,
-      quantity: quantity ?? this.quantity,
     );
   }
 }

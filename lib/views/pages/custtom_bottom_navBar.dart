@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:shop_online/views/pages/favorite_page.dart';
 import 'package:shop_online/views/pages/home_page.dart';
-import 'package:shop_online/views/pages/my_Orders_page.dart';
+import 'package:shop_online/views/pages/cart_page.dart';
 import 'package:shop_online/views/pages/profile_page.dart';
 
 class CusttomBottomNavbarPage extends StatefulWidget {
@@ -61,7 +61,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
 
   List<Widget> screens = [
     HomePage(),
-    MyOrdersPage(),
+    CartPage(),
     FavoritePage(),
     ProfilePage(),
   ];
