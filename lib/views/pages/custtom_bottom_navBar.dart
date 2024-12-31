@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:shop_online/view_models/cart_cubit/cart_cubit.dart';
+import 'package:shop_online/view_models/home_cobit/home_cubit.dart';
 import 'package:shop_online/views/pages/favorite_page.dart';
 import 'package:shop_online/views/pages/home_page.dart';
 import 'package:shop_online/views/pages/cart_page.dart';
@@ -60,8 +63,22 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
   }
 
   List<Widget> screens = [
-    HomePage(),
-    CartPage(),
+    BlocProvider(
+      create: (context) {
+        final cubit = HomeCubit();
+        cubit.getHomeData();
+        return cubit;
+      },
+      child: HomePage(),
+    ),
+    BlocProvider(
+      create: (context) {
+        final cubit = CartCubit();
+        cubit.getCartsItems();
+        return cubit;
+      },
+      child: CartPage(),
+    ),
     FavoritePage(),
     ProfilePage(),
   ];
@@ -72,23 +89,18 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
       controller: _controller,
       screens: screens,
       items: navBarItems(),
-      handleAndroidBackButtonPress: true, // Default is true.
-      resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
-      stateManagement: true, // Default is true.
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: false,
       hideNavigationBarWhenKeyboardAppears: true,
-      // popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
       padding: const EdgeInsets.only(top: 7, bottom: 5),
-      //backgroundColor: Colors.grey.shade900,
       isVisible: true,
       animationSettings: const NavBarAnimationSettings(
         navBarItemAnimation: ItemAnimationSettings(
-          // Navigation Bar's items animation properties.
           duration: Duration(milliseconds: 400),
           curve: Curves.ease,
         ),
         screenTransitionAnimation: ScreenTransitionAnimationSettings(
-          // Screen transition animation on change of selected tab.
           animateTabTransition: true,
           duration: Duration(milliseconds: 200),
           screenTransitionAnimationType: ScreenTransitionAnimationType.slide,
@@ -96,8 +108,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
       ),
       confineToSafeArea: true,
       navBarHeight: kBottomNavigationBarHeight,
-      navBarStyle:
-          NavBarStyle.style6, // Choose the nav bar style with this property
+      navBarStyle: NavBarStyle.style6,
     );
   }
 }

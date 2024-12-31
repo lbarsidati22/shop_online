@@ -44,7 +44,8 @@ class PrudactDetailsCubit extends Cubit<PrudactDetailsState> {
   void addToCart(String prudactId) {
     emit(PrudactAddingToCart());
     final cartItem = AddToCartModel(
-      prudactId: prudactId,
+      id: DateTime.now().toIso8601String(),
+      prudact: dummyProducts.firstWhere((item) => item.id == prudactId),
       size: selectedSize!,
       quantity: quantity,
     );
