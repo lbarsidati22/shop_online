@@ -29,7 +29,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
     return [
       PersistentBottomNavBarItem(
         inactiveColorPrimary: Colors.blueGrey,
-        activeColorPrimary: Colors.deepPurple,
+        activeColorPrimary: Theme.of(context).primaryColor,
         icon: Icon(
           CupertinoIcons.home,
         ),
@@ -37,7 +37,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
       ),
       PersistentBottomNavBarItem(
         inactiveColorPrimary: Colors.blueGrey,
-        activeColorPrimary: Colors.deepPurple,
+        activeColorPrimary: Theme.of(context).primaryColor,
         icon: Icon(
           CupertinoIcons.shopping_cart,
         ),
@@ -45,7 +45,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
       ),
       PersistentBottomNavBarItem(
         inactiveColorPrimary: Colors.blueGrey,
-        activeColorPrimary: Colors.deepPurple,
+        activeColorPrimary: Theme.of(context).primaryColor,
         icon: Icon(
           CupertinoIcons.heart,
         ),
@@ -53,7 +53,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
       ),
       PersistentBottomNavBarItem(
         inactiveColorPrimary: Colors.blueGrey,
-        activeColorPrimary: Colors.deepPurple,
+        activeColorPrimary: Theme.of(context).primaryColor,
         icon: Icon(
           CupertinoIcons.person,
         ),
@@ -62,53 +62,87 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
     ];
   }
 
+  int currentIndex = 0;
   List<Widget> screens = [
-    BlocProvider(
-      create: (context) {
-        final cubit = HomeCubit();
-        cubit.getHomeData();
-        return cubit;
-      },
-      child: HomePage(),
-    ),
-    BlocProvider(
-      create: (context) {
-        final cubit = CartCubit();
-        cubit.getCartsItems();
-        return cubit;
-      },
-      child: CartPage(),
-    ),
+    HomePage(),
+    CartPage(),
     FavoritePage(),
     ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: screens,
-      items: navBarItems(),
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: false,
-      hideNavigationBarWhenKeyboardAppears: true,
-      padding: const EdgeInsets.only(top: 7, bottom: 5),
-      isVisible: true,
-      animationSettings: const NavBarAnimationSettings(
-        navBarItemAnimation: ItemAnimationSettings(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
+    return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: CircleAvatar(
+            radius: 25,
+            backgroundImage: AssetImage('assets/images/lbar.jpg'),
+          ),
         ),
-        screenTransitionAnimation: ScreenTransitionAnimationSettings(
-          animateTabTransition: true,
-          duration: Duration(milliseconds: 200),
-          screenTransitionAnimationType: ScreenTransitionAnimationType.slide,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Lbar Sidati',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(),
+            ),
+            Text(
+              'Let\'s go shooping',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Colors.grey,
+                  ),
+            ),
+          ],
         ),
+        actions: [
+          if (currentIndex == 0) ...[
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.notifications),
+            ),
+          ] else if (currentIndex == 1)
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.shopping_bag),
+            )
+        ],
       ),
-      confineToSafeArea: true,
-      navBarHeight: kBottomNavigationBarHeight,
-      navBarStyle: NavBarStyle.style6,
+      body: PersistentTabView(
+        context,
+        controller: _controller,
+        screens: screens,
+        items: navBarItems(),
+        onItemSelected: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: false,
+        hideNavigationBarWhenKeyboardAppears: true,
+        padding: const EdgeInsets.only(top: 7, bottom: 5),
+        isVisible: true,
+        animationSettings: const NavBarAnimationSettings(
+          navBarItemAnimation: ItemAnimationSettings(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: ScreenTransitionAnimationSettings(
+            animateTabTransition: true,
+            duration: Duration(milliseconds: 200),
+            screenTransitionAnimationType: ScreenTransitionAnimationType.slide,
+          ),
+        ),
+        confineToSafeArea: true,
+        navBarHeight: kBottomNavigationBarHeight,
+        navBarStyle: NavBarStyle.style6,
+      ),
     );
   }
 }

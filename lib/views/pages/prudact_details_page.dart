@@ -56,7 +56,7 @@ class PrudactDetailsPage extends StatelessWidget {
                   width: double.infinity,
                   height: size.height * 0.54,
                   decoration: BoxDecoration(
-                    color: AppColors.grey2,
+                    color: AppColors.grey3,
                   ),
                   child: Column(
                     children: [
@@ -183,7 +183,7 @@ class PrudactDetailsPage extends StatelessWidget {
                                                       state.size == size
                                                   ? Theme.of(context)
                                                       .primaryColor
-                                                  : AppColors.grey2,
+                                                  : AppColors.grey3,
                                             ),
                                             child: Padding(
                                               padding: EdgeInsets.all(12),

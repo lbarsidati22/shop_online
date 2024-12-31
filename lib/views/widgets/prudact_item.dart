@@ -18,7 +18,7 @@ class PrudactItem extends StatelessWidget {
               width: size.height * 0.3,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: AppColors.grey2,
+                color: AppColors.grey3,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

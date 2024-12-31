@@ -6,8 +6,10 @@ class CounterWidget extends StatelessWidget {
   final int value;
   final String prudactId;
   final dynamic cubit;
+  final int? initialValue;
   const CounterWidget({
     super.key,
+    this.initialValue,
     required this.value,
     required this.cubit,
     required this.prudactId,
@@ -17,18 +19,22 @@ class CounterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.grey2,
+        color: AppColors.grey3,
         borderRadius: BorderRadius.circular(34),
       ),
       child: Row(
         children: [
           IconButton(
-            onPressed: () => cubit.decrementCounter(prudactId),
+            onPressed: () => initialValue != null
+                ? cubit.decrementCounter(prudactId, initialValue)
+                : cubit.decrementCounter(prudactId),
             icon: Icon(Icons.remove),
           ),
           Text(value.toString()),
           IconButton(
-            onPressed: () => cubit.incrementCounter(prudactId),
+            onPressed: () => initialValue != null
+                ? cubit.incrementCounter(prudactId, initialValue)
+                : cubit.incrementCounter(prudactId),
             icon: Icon(Icons.add),
           ),
         ],

@@ -19,7 +19,7 @@ class CartItemWidget extends StatelessWidget {
         children: [
           DecoratedBox(
             decoration: BoxDecoration(
-              color: AppColors.grey2,
+              color: AppColors.grey3,
               borderRadius: BorderRadius.circular(16),
             ),
             child: CachedNetworkImage(
@@ -54,37 +54,55 @@ class CartItemWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BlocBuilder<CartCubit, CartState>(
-                      bloc: cubit,
-                      buildWhen: (previous, current) =>
-                          current is QuantityCounterLoaded,
-                      builder: (context, state) {
-                        if (state is QuantityCounterLoaded) {
-                          return CounterWidget(
+                BlocBuilder<CartCubit, CartState>(
+                  bloc: cubit,
+                  buildWhen: (previous, current) =>
+                      current is QuantityCounterLoaded &&
+                      current.prudactId == cartItem.prudact.id,
+                  builder: (context, state) {
+                    if (state is QuantityCounterLoaded) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CounterWidget(
                             value: state.value,
                             cubit: cubit,
                             prudactId: cartItem.prudact.id,
-                          );
-                        }
-                        return CounterWidget(
+                          ),
+                          Text(
+                            '\$${state.value * cartItem.prudact.price}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
+                      );
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CounterWidget(
+                          initialValue: cartItem.quantity,
                           value: cartItem.quantity,
                           cubit: cubit,
                           prudactId: cartItem.prudact.id,
-                        );
-                      },
-                    ),
-                    Text(
-                      '\$${cartItem.prudact.price}',
-                      style:
-                          Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        ),
+                        Text(
+                          '\$${cartItem.totalPrice.toStringAsFixed(1)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
-                    ),
-                  ],
-                ),
+                        ),
+                      ],
+                    );
+                  },
+                )
               ],
             ),
           ),

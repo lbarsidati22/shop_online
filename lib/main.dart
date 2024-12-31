@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Shop-Online',
       theme: ThemeData(
+        primaryColor: Colors.deepPurple,
         useMaterial3: true,
       ),
       home: const CusttomBottomNavbarPage(),

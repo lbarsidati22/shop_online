@@ -12,6 +12,7 @@ class AddToCartModel {
     required this.size,
     required this.quantity,
   });
+  double get totalPrice => prudact.price * quantity;
 }
 
 List<AddToCartModel> dummyCart = [];

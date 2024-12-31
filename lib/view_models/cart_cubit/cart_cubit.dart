@@ -8,22 +8,31 @@ class CartCubit extends Cubit<CartState> {
   int quantity = 1;
   void getCartsItems() {
     emit(CartLeading());
-    emit(CartLoaded(dummyCart));
+    final subTotal = dummyCart.fold<double>(
+        0, (previuseValue, item) => previuseValue + item.prudact.price);
+    emit(CartLoaded(subTotal, dummyCart));
   }
 
-  void incrementCounter(String prudactId) {
+  void incrementCounter(String prudactId, [int? initialValue]) {
+    if (initialValue != null) {
+      quantity = initialValue;
+    }
     quantity++;
 
     emit(
-      QuantityCounterLoaded(value: quantity),
+      QuantityCounterLoaded(value: quantity, prudactId: prudactId),
     );
   }
 
-  void decrementCounter(String prudactId) {
+  void decrementCounter(String prudactId, [int? initialValue]) {
+    if (initialValue != null) {
+      quantity = initialValue;
+    }
+
     quantity--;
 
     emit(
-      QuantityCounterLoaded(value: quantity),
+      QuantityCounterLoaded(value: quantity, prudactId: prudactId),
     );
   }
 }
