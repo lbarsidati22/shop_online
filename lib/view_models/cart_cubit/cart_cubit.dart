@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/models/add_to_cart_model.dart';
 
@@ -8,9 +9,8 @@ class CartCubit extends Cubit<CartState> {
   int quantity = 1;
   void getCartsItems() {
     emit(CartLeading());
-    final subTotal = dummyCart.fold<double>(
-        0, (previuseValue, item) => previuseValue + item.prudact.price);
-    emit(CartLoaded(subTotal, dummyCart));
+
+    emit(CartLoaded(_subtotal, dummyCart));
   }
 
   void incrementCounter(String prudactId, [int? initialValue]) {
@@ -18,21 +18,38 @@ class CartCubit extends Cubit<CartState> {
       quantity = initialValue;
     }
     quantity++;
-
-    emit(
-      QuantityCounterLoaded(value: quantity, prudactId: prudactId),
+    final index = dummyCart.indexWhere(
+      (item) => item.prudact.id == prudactId,
     );
+    dummyCart[index] = dummyCart[index].copyWith(
+      quantity: quantity,
+    );
+
+    emit(QuantityCounterLoaded(value: quantity, prudactId: prudactId));
+    emit(SubtotalUpdated(subtotal: _subtotal));
   }
 
   void decrementCounter(String prudactId, [int? initialValue]) {
     if (initialValue != null) {
       quantity = initialValue;
     }
+    if (quantity > 1) {
+      quantity--;
+    }
 
-    quantity--;
-
-    emit(
-      QuantityCounterLoaded(value: quantity, prudactId: prudactId),
+    final index = dummyCart.indexWhere(
+      (item) => item.prudact.id == prudactId,
     );
+    dummyCart[index] = dummyCart[index].copyWith(
+      quantity: quantity,
+    );
+
+    emit(QuantityCounterLoaded(value: quantity, prudactId: prudactId));
+    emit(SubtotalUpdated(subtotal: _subtotal));
   }
+
+  double get _subtotal => dummyCart.fold<double>(
+      0,
+      (previuseValue, item) =>
+          previuseValue + (item.prudact.price * item.quantity));
 }

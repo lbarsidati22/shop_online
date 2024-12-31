@@ -13,6 +13,20 @@ class AddToCartModel {
     required this.quantity,
   });
   double get totalPrice => prudact.price * quantity;
+
+  AddToCartModel copyWith({
+    String? id,
+    PrudactItemModel? prudact,
+    PrudactSize? size,
+    int? quantity,
+  }) {
+    return AddToCartModel(
+      id: id ?? this.id,
+      prudact: prudact ?? this.prudact,
+      size: size ?? this.size,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 List<AddToCartModel> dummyCart = [];

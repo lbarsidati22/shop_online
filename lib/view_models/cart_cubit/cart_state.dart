@@ -32,3 +32,11 @@ final class QuantityCounterLoaded extends CartState {
     required this.prudactId,
   });
 }
+
+final class SubtotalUpdated extends CartState {
+  final double subtotal;
+
+  SubtotalUpdated({
+    required this.subtotal,
+  });
+}

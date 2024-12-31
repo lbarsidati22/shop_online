@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:shop_online/utils/app_colors.dart';
+import 'package:shop_online/utils/app_router.dart';
+import 'package:shop_online/utils/app_routes.dart';
 import 'package:shop_online/view_models/cart_cubit/cart_cubit.dart';
 import 'package:shop_online/views/widgets/cart_item_widget.dart';
 
@@ -17,8 +19,9 @@ class CartPage extends StatelessWidget {
         return cubit;
       },
       child: Builder(builder: (context) {
+        final cubit = BlocProvider.of<CartCubit>(context);
         return BlocBuilder<CartCubit, CartState>(
-          bloc: BlocProvider.of<CartCubit>(context),
+          bloc: cubit,
           buildWhen: (previous, current) =>
               current is CartLeading ||
               current is CartLoaded ||
@@ -58,22 +61,59 @@ class CartPage extends StatelessWidget {
                     Divider(
                       color: AppColors.grey3,
                     ),
-                    totalAndSubtotalWidget(
-                        title: 'Subtotal',
-                        amount: state.subTotal,
-                        context: context),
-                    totalAndSubtotalWidget(
-                        title: 'Shipping', amount: 10, context: context),
-                    SizedBox(height: 5),
-                    Dash(
-                      dashColor: AppColors.grey4,
-                      length: MediaQuery.of(context).size.width - 32,
+                    BlocBuilder<CartCubit, CartState>(
+                      bloc: cubit,
+                      buildWhen: (brevires, current) =>
+                          current is SubtotalUpdated,
+                      builder: (context, subtotalState) {
+                        if (subtotalState is SubtotalUpdated) {
+                          return Column(
+                            children: [
+                              totalAndSubtotalWidget(
+                                  title: 'Subtotal',
+                                  amount: subtotalState.subtotal,
+                                  context: context),
+                              totalAndSubtotalWidget(
+                                  title: 'Shipping',
+                                  amount: 10,
+                                  context: context),
+                              SizedBox(height: 5),
+                              Dash(
+                                dashColor: AppColors.grey4,
+                                length: MediaQuery.of(context).size.width - 32,
+                              ),
+                              SizedBox(height: 5),
+                              totalAndSubtotalWidget(
+                                  title: 'Total Amount',
+                                  amount: subtotalState.subtotal + 10,
+                                  context: context),
+                            ],
+                          );
+                        }
+                        return Column(
+                          children: [
+                            totalAndSubtotalWidget(
+                                title: 'Subtotal',
+                                amount: state.subTotal,
+                                context: context),
+                            totalAndSubtotalWidget(
+                                title: 'Shipping',
+                                amount: 10,
+                                context: context),
+                            SizedBox(height: 5),
+                            Dash(
+                              dashColor: AppColors.grey4,
+                              length: MediaQuery.of(context).size.width - 32,
+                            ),
+                            SizedBox(height: 5),
+                            totalAndSubtotalWidget(
+                                title: 'Total Amount',
+                                amount: state.subTotal + 10,
+                                context: context),
+                          ],
+                        );
+                      },
                     ),
-                    SizedBox(height: 5),
-                    totalAndSubtotalWidget(
-                        title: 'Total Amount',
-                        amount: state.subTotal + 10,
-                        context: context),
                     SizedBox(height: 24),
                     Padding(
                       padding:
@@ -85,7 +125,10 @@ class CartPage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed(AppRoutes.checkoutRour);
+                          },
                           child: Text(
                             'Ckekout',
                             style: Theme.of(context)
