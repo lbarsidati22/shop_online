@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/utils/app_colors.dart';
-import 'package:shop_online/view_models/add_new_card_cubit/add_new_card_cubit.dart';
+import 'package:shop_online/view_models/add_new_card_cubit/payment_mothods_cubit.dart';
 import 'package:shop_online/views/widgets/label_with_text_feild_new_cart.dart';
 
 class AddNewCartPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AddNewCartPageState extends State<AddNewCartPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<AddNewCardCubit>(context);
+    final cubit = BlocProvider.of<PaymentMethodsCubit>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +75,8 @@ class _AddNewCartPageState extends State<AddNewCartPage> {
                   SizedBox(
                     width: double.infinity,
                     height: size.height * 0.07,
-                    child: BlocConsumer<AddNewCardCubit, AddNewCardState>(
+                    child:
+                        BlocConsumer<PaymentMethodsCubit, PaymentMethodsState>(
                       listenWhen: (previous, current) =>
                           current is AddNewCardLoaded ||
                           current is AddNewCardError ||

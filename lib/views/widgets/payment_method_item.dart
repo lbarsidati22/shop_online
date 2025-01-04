@@ -18,7 +18,7 @@ class PaymentMethodItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: AppColors.white,
           border: Border.all(
-            color: AppColors.grey,
+            color: AppColors.grey4,
           ),
         ),
         child: ListTile(

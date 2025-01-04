@@ -3,18 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/models/payment_cart_model.dart';
 import 'package:shop_online/utils/app_colors.dart';
+import 'package:shop_online/view_models/add_new_card_cubit/payment_mothods_cubit.dart';
 import 'package:shop_online/view_models/checkout_cubit/checkout_cubit.dart';
 import 'package:shop_online/views/pages/empty_shopping_peyment.dart';
 import 'package:shop_online/views/widgets/checkout_headlins_item.dart';
+import 'package:shop_online/views/widgets/payment_bottom_sheett.dart';
 import 'package:shop_online/views/widgets/payment_method_item.dart';
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
-  Widget buildPaymentMethod(PaymentCartModel? chosenCard) {
+  Widget buildPaymentMethod(
+      PaymentCartModel? chosenCard, BuildContext context) {
     if (chosenCard != null) {
       return PaymentMethodItem(
         paymentCart: chosenCard,
-        onItemTap: () {},
+        onItemTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (_) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  width: double.infinity,
+                  child: BlocProvider(
+                    create: (context) =>
+                        PaymentMethodsCubit()..fetchPaymentMethod(),
+                    child: PaymentBottomSheett(),
+                  ),
+                );
+              });
+        },
       );
     } else {
       return EmptyShoppingPeyment(
@@ -165,7 +182,7 @@ class CheckoutPage extends StatelessWidget {
                             title: 'Payment Method',
                           ),
                           SizedBox(height: 14),
-                          buildPaymentMethod(chosenPaymentCards),
+                          buildPaymentMethod(chosenPaymentCards, context),
                           SizedBox(height: 14),
                           Divider(
                             color: AppColors.grey,

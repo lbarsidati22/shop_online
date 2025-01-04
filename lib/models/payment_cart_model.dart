@@ -14,4 +14,26 @@ class PaymentCartModel {
   });
 }
 
-List<PaymentCartModel> dummyPaymentCard = [];
+List<PaymentCartModel> dummyPaymentCard = [
+  PaymentCartModel(
+    id: '1',
+    cardNumber: '1234 5678 9012 3456',
+    cardHolderName: 'Lbar Sidati',
+    expiryDate: '12/23',
+    cvv: '123',
+  ),
+  PaymentCartModel(
+    id: '2',
+    cardNumber: '1234 5678 9012 3466',
+    cardHolderName: 'John Doe',
+    expiryDate: '12/23',
+    cvv: '123',
+  ),
+  PaymentCartModel(
+    id: '3',
+    cardNumber: '1234 5678 9012 3477',
+    cardHolderName: 'Tim Smith',
+    expiryDate: '12/23',
+    cvv: '123',
+  ),
+];
