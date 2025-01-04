@@ -1,13 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_online/models/payment_cart_model.dart';
 import 'package:shop_online/utils/app_colors.dart';
 import 'package:shop_online/view_models/checkout_cubit/checkout_cubit.dart';
 import 'package:shop_online/views/pages/empty_shopping_peyment.dart';
 import 'package:shop_online/views/widgets/checkout_headlins_item.dart';
+import 'package:shop_online/views/widgets/payment_method_item.dart';
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
+  Widget buildPaymentMethod(PaymentCartModel? chosenCard) {
+    if (chosenCard != null) {
+      return PaymentMethodItem(
+        paymentCart: chosenCard,
+        onItemTap: () {},
+      );
+    } else {
+      return EmptyShoppingPeyment(
+        title: 'Add Payment Method',
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +55,7 @@ class CheckoutPage extends StatelessWidget {
                 );
               } else if (state is CheckoutLoaded) {
                 final cartItems = state.cartItems;
+                final chosenPaymentCards = state.chosenPaymentCards;
                 return SafeArea(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -150,9 +165,7 @@ class CheckoutPage extends StatelessWidget {
                             title: 'Payment Method',
                           ),
                           SizedBox(height: 14),
-                          EmptyShoppingPeyment(
-                            title: 'Add Payment Method',
-                          ),
+                          buildPaymentMethod(chosenPaymentCards),
                           SizedBox(height: 14),
                           Divider(
                             color: AppColors.grey,
