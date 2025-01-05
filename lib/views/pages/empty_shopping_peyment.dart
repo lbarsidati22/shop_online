@@ -6,16 +6,28 @@ import 'package:shop_online/view_models/checkout_cubit/checkout_cubit.dart';
 
 class EmptyShoppingPeyment extends StatelessWidget {
   final String title;
-  const EmptyShoppingPeyment({super.key, required this.title});
+  final bool isPayment;
+  const EmptyShoppingPeyment({
+    super.key,
+    required this.title,
+    required this.isPayment,
+  });
 
   @override
   Widget build(BuildContext context) {
     final checkouCubit = BlocProvider.of<CheckoutCubit>(context);
     return InkWell(
       onTap: () {
-        Navigator.of(context, rootNavigator: true)
-            .pushNamed(AppRoutes.addNewCartRoute)
-            .then((value) => checkouCubit.getCartItems());
+        if (isPayment) {
+          Navigator.of(context, rootNavigator: true)
+              .pushNamed(AppRoutes.addNewCartRoute)
+              .then((value) => checkouCubit.getCartItems());
+        } else {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).pushNamed(AppRoutes.choseLocationRoute);
+        }
       },
       child: Container(
         width: double.infinity,

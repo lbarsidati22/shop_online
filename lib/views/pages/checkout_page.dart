@@ -37,6 +37,7 @@ class CheckoutPage extends StatelessWidget {
       );
     } else {
       return EmptyShoppingPeyment(
+        isPayment: true,
         title: 'Add Payment Method',
       );
     }
@@ -90,6 +91,7 @@ class CheckoutPage extends StatelessWidget {
                             height: 16,
                           ),
                           EmptyShoppingPeyment(
+                            isPayment: false,
                             title: 'Add Shopping Address',
                           ),
                           SizedBox(
