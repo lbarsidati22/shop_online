@@ -6,15 +6,21 @@ class MainBottom extends StatelessWidget {
   final VoidCallback? onTap;
   final Color backGroundColor;
   final Color forGroundColor;
-  final String text;
-  const MainBottom({
+  final String? text;
+  final bool isLeading;
+  MainBottom({
+    this.isLeading = false,
     super.key,
     this.height = 60,
     this.onTap,
     this.backGroundColor = AppColors.prymaryColor,
     this.forGroundColor = AppColors.white,
-    required this.text,
-  });
+    this.text,
+  }) {
+    assert(
+      text != null || isLeading == true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +33,14 @@ class MainBottom extends StatelessWidget {
           backgroundColor: backGroundColor,
           foregroundColor: forGroundColor,
         ),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: AppColors.white,
+        child: isLeading
+            ? Center(child: CircularProgressIndicator.adaptive())
+            : Text(
+                text!,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: AppColors.white,
+                    ),
               ),
-        ),
       ),
     );
   }

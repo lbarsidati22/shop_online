@@ -6,7 +6,7 @@ part 'payment_methods_state.dart';
 
 class PaymentMethodsCubit extends Cubit<PaymentMethodsState> {
   PaymentMethodsCubit() : super(PaymentMethodsInitial());
-
+  String selectedPaymentId = dummyPaymentCard.first.id;
   void addNewCard(
     String cardNumber,
     String holderName,
@@ -35,9 +35,43 @@ class PaymentMethodsCubit extends Cubit<PaymentMethodsState> {
         emit(
           FetchedPaymentMethods(paymentCarts: dummyPaymentCard),
         );
+        final chosenPaymentMethod = dummyPaymentCard.firstWhere(
+            (payemntCart) => payemntCart.isChosen == true,
+            orElse: () => dummyPaymentCard.first);
+        emit(PaymentMethodsChosen(chosenPaymentMethod));
       } else {
         emit(FetchPaymentMethodsError(message: 'No Payment Methods Found !'));
       }
+    });
+  }
+
+  void changePaymentMethod(String id) {
+    selectedPaymentId = id;
+    var tempChosenPaymentMethod = dummyPaymentCard
+        .firstWhere((paymentCard) => paymentCard.id == selectedPaymentId);
+    emit(PaymentMethodsChosen(tempChosenPaymentMethod));
+  }
+
+  void confirmPaymentMethod() {
+    emit(ConfirmPaymentLeading());
+    Future.delayed(Duration(seconds: 1), () {
+      var chosenPaymentMethod = dummyPaymentCard
+          .firstWhere((paymentCard) => paymentCard.id == selectedPaymentId);
+      var previousPaymentMethod = dummyPaymentCard.firstWhere(
+          (paymentCard) => paymentCard.isChosen == true,
+          orElse: () => dummyPaymentCard.first);
+      previousPaymentMethod = previousPaymentMethod.copyWith(isChosen: false);
+      chosenPaymentMethod = chosenPaymentMethod.copyWith(
+        isChosen: true,
+      );
+      final previousIndex = dummyPaymentCard.indexWhere(
+          (paymentCart) => paymentCart.id == previousPaymentMethod.id);
+      final chosenIndex = dummyPaymentCard.indexWhere(
+          (paymentCart) => paymentCart.id == chosenPaymentMethod.id);
+
+      dummyPaymentCard[previousIndex] = previousPaymentMethod;
+      dummyPaymentCard[chosenIndex] = chosenPaymentMethod;
+      emit(ConfirmPaymentLoaded());
     });
   }
 }

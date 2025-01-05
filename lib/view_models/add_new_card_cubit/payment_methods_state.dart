@@ -31,3 +31,19 @@ final class FetchPaymentMethodsError extends PaymentMethodsState {
 
   FetchPaymentMethodsError({required this.message});
 }
+
+final class PaymentMethodsChosen extends PaymentMethodsState {
+  final PaymentCartModel chosenPyment;
+
+  PaymentMethodsChosen(this.chosenPyment);
+}
+
+final class ConfirmPaymentLeading extends PaymentMethodsState {}
+
+final class ConfirmPaymentLoaded extends PaymentMethodsState {}
+
+final class ConfirmPaymentError extends PaymentMethodsState {
+  final String message;
+
+  ConfirmPaymentError({required this.message});
+}

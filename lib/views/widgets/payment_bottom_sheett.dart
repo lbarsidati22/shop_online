@@ -12,6 +12,7 @@ class PaymentBottomSheett extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final paymentMethodCubit = BlocProvider.of<PaymentMethodsCubit>(context);
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 16),
       child: SingleChildScrollView(
@@ -46,6 +47,10 @@ class PaymentBottomSheett extends StatelessWidget {
                         return Card(
                           color: AppColors.white,
                           child: ListTile(
+                            onTap: () {
+                              paymentMethodCubit
+                                  .changePaymentMethod(paymentCarts.id);
+                            },
                             leading: DecoratedBox(
                               decoration: BoxDecoration(
                                 color: AppColors.grey2,
@@ -65,6 +70,27 @@ class PaymentBottomSheett extends StatelessWidget {
                             ),
                             title: Text(paymentCarts.cardNumber),
                             subtitle: Text(paymentCarts.cardHolderName),
+                            trailing: BlocBuilder<PaymentMethodsCubit,
+                                PaymentMethodsState>(
+                              bloc: paymentMethodCubit,
+                              buildWhen: (prevous, current) =>
+                                  current is PaymentMethodsChosen,
+                              builder: (context, state) {
+                                if (state is PaymentMethodsChosen) {
+                                  final chosenPaymentMethos =
+                                      state.chosenPyment;
+                                  return Radio<String>(
+                                    value: paymentCarts.id,
+                                    groupValue: chosenPaymentMethos.id,
+                                    onChanged: (id) {
+                                      paymentMethodCubit
+                                          .changePaymentMethod(id!);
+                                    },
+                                  );
+                                }
+                                return SizedBox.shrink();
+                              },
+                            ),
                           ),
                         );
                       });
@@ -100,9 +126,32 @@ class PaymentBottomSheett extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            MainBottom(
-              onTap: () {},
-              text: 'Confirm Payment',
+            BlocConsumer<PaymentMethodsCubit, PaymentMethodsState>(
+              listenWhen: (previous, current) =>
+                  current is ConfirmPaymentLoaded,
+              listener: (context, state) {
+                if (state is ConfirmPaymentLoaded) {
+                  Navigator.pop(context);
+                }
+              },
+              bloc: paymentMethodCubit,
+              buildWhen: (previous, current) =>
+                  current is ConfirmPaymentError ||
+                  current is ConfirmPaymentLeading ||
+                  current is ConfirmPaymentLoaded,
+              builder: (context, state) {
+                if (state is ConfirmPaymentLeading) {
+                  return MainBottom(
+                    isLeading: true,
+                  );
+                }
+                return MainBottom(
+                  onTap: () {
+                    paymentMethodCubit.confirmPaymentMethod();
+                  },
+                  text: 'Confirm Payment',
+                );
+              },
             ),
           ],
         ),

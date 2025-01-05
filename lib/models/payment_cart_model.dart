@@ -4,14 +4,34 @@ class PaymentCartModel {
   final String cardHolderName;
   final String expiryDate;
   final String cvv;
+  final bool isChosen;
 
   PaymentCartModel({
+    this.isChosen = false,
     required this.id,
     required this.cardNumber,
     required this.cardHolderName,
     required this.expiryDate,
     required this.cvv,
   });
+
+  PaymentCartModel copyWith({
+    String? id,
+    String? cardNumber,
+    String? cardHolderName,
+    String? expiryDate,
+    String? cvv,
+    bool? isChosen,
+  }) {
+    return PaymentCartModel(
+      id: id ?? this.id,
+      cardNumber: cardNumber ?? this.cardNumber,
+      cardHolderName: cardHolderName ?? this.cardHolderName,
+      expiryDate: expiryDate ?? this.expiryDate,
+      cvv: cvv ?? this.cvv,
+      isChosen: isChosen ?? this.isChosen,
+    );
+  }
 }
 
 List<PaymentCartModel> dummyPaymentCard = [
