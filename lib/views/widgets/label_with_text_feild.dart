@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:shop_online/utils/app_colors.dart';
 
-class LabelWithTextFeildNewCart extends StatefulWidget {
+class LabelWithTextFeild extends StatefulWidget {
   final String label;
   final String hintText;
   final IconData icon;
   final TextEditingController controller;
-  const LabelWithTextFeildNewCart({
+  final Widget? suffixIcon;
+  final bool obscureText;
+  const LabelWithTextFeild({
     super.key,
+    this.obscureText = false,
+    this.suffixIcon,
     required this.label,
     required this.hintText,
     required this.icon,
@@ -16,11 +20,10 @@ class LabelWithTextFeildNewCart extends StatefulWidget {
   });
 
   @override
-  State<LabelWithTextFeildNewCart> createState() =>
-      _LabelWithTextFeildNewCartState();
+  State<LabelWithTextFeild> createState() => _LabelWithTextFeildState();
 }
 
-class _LabelWithTextFeildNewCartState extends State<LabelWithTextFeildNewCart> {
+class _LabelWithTextFeildState extends State<LabelWithTextFeild> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +39,10 @@ class _LabelWithTextFeildNewCartState extends State<LabelWithTextFeildNewCart> {
               ? '${widget.label} Cannot Be Empty'
               : null,
           controller: widget.controller,
+          obscureText: widget.obscureText,
           decoration: InputDecoration(
+            suffixIcon: widget.suffixIcon,
+            suffixIconColor: AppColors.grey,
             prefixIcon: Icon(
               widget.icon,
               color: AppColors.grey,

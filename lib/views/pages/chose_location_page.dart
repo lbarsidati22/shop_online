@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_online/models/loaction_item_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/utils/app_colors.dart';
+import 'package:shop_online/view_models/chose_location_cubit/chose_location_cubit.dart';
 import 'package:shop_online/views/widgets/main_bottom.dart';
 
 class ChoseLocationPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _ChoseLocationPageState extends State<ChoseLocationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<ChoseLocationCubit>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -52,12 +54,46 @@ class _ChoseLocationPageState extends State<ChoseLocationPage> {
                       Icons.location_on_outlined,
                       color: AppColors.grey,
                     ),
-                    suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.add,
-                        color: AppColors.grey,
-                      ),
+                    suffixIcon:
+                        BlocConsumer<ChoseLocationCubit, ChoseLocationState>(
+                      listenWhen: (previous, current) =>
+                          current is LocationAded,
+                      listener: (context, state) {
+                        if (state is LocationAded) {
+                          locationController.clear();
+                        }
+                      },
+                      bloc: cubit,
+                      buildWhen: (previous, current) =>
+                          current is LocationsAdding ||
+                          current is LocationAded ||
+                          current is LocationsAddingFailure,
+                      builder: (context, state) {
+                        if (state is LocationsAdding) {
+                          return Center(
+                            child: CircularProgressIndicator.adaptive(
+                              backgroundColor: AppColors.grey,
+                            ),
+                          );
+                        }
+                        return IconButton(
+                          onPressed: () {
+                            if (locationController.text.isNotEmpty) {
+                              cubit.addLocation(locationController.text);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Your locations required'),
+                                ),
+                              );
+                            }
+                          },
+                          icon: Icon(
+                            Icons.add,
+                            color: AppColors.grey,
+                          ),
+                        );
+                      },
                     ),
                     hintText: 'Write your location',
                     fillColor: AppColors.grey2,
@@ -80,65 +116,91 @@ class _ChoseLocationPageState extends State<ChoseLocationPage> {
                       ),
                 ),
                 SizedBox(height: 16),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: dummyLocations.length,
-                  itemBuilder: (context, index) {
-                    final dummyLoaction = dummyLocations[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.grey,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    dummyLoaction.city,
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                  Text(
-                                    '${dummyLoaction.city} - ${dummyLoaction.country}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                          color: AppColors.grey,
+                BlocBuilder<ChoseLocationCubit, ChoseLocationState>(
+                  bloc: cubit,
+                  buildWhen: (previous, current) =>
+                      current is FetchedLocations ||
+                      current is FetchLocationsFailure ||
+                      current is FetchingLocations,
+                  builder: (context, state) {
+                    if (state is FetchingLocations) {
+                      return Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    } else if (state is FetchedLocations) {
+                      final locations = state.locations;
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: locations.length,
+                        itemBuilder: (context, index) {
+                          final location = locations[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.grey,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          location.city,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
                                         ),
-                                  ),
-                                ],
-                              ),
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 44,
-                                    backgroundColor: AppColors.grey,
-                                  ),
-                                  CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: CachedNetworkImageProvider(
-                                      dummyLoaction.imgUrl,
+                                        Text(
+                                          '${location.city} - ${location.country}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                color: AppColors.grey,
+                                              ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 44,
+                                          backgroundColor: AppColors.grey,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                            location.imgUrl,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                            ),
+                          );
+                        },
+                      );
+                    } else if (state is FetchLocationsFailure) {
+                      return Center(
+                        child: Text(state.message),
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
                   },
                 ),
                 SizedBox(height: 16),

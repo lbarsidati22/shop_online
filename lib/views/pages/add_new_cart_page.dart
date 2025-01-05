@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/utils/app_colors.dart';
 import 'package:shop_online/view_models/add_new_card_cubit/payment_mothods_cubit.dart';
-import 'package:shop_online/views/widgets/label_with_text_feild_new_cart.dart';
+import 'package:shop_online/views/widgets/label_with_text_feild.dart';
 
 class AddNewCartPage extends StatefulWidget {
   const AddNewCartPage({super.key});
@@ -36,7 +36,7 @@ class _AddNewCartPageState extends State<AddNewCartPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LabelWithTextFeildNewCart(
+                  LabelWithTextFeild(
                     label: 'Cart Number',
                     hintText: 'Enter cart number',
                     icon: Icons.credit_card,
@@ -45,7 +45,7 @@ class _AddNewCartPageState extends State<AddNewCartPage> {
                   SizedBox(
                     height: 13,
                   ),
-                  LabelWithTextFeildNewCart(
+                  LabelWithTextFeild(
                     label: 'Cart Holder Name',
                     hintText: 'Enter cart Holder Name',
                     icon: Icons.person,
@@ -54,7 +54,7 @@ class _AddNewCartPageState extends State<AddNewCartPage> {
                   SizedBox(
                     height: 13,
                   ),
-                  LabelWithTextFeildNewCart(
+                  LabelWithTextFeild(
                     label: 'Expiry Date',
                     hintText: 'Enter Expiry Date',
                     icon: Icons.date_range,
@@ -63,7 +63,7 @@ class _AddNewCartPageState extends State<AddNewCartPage> {
                   SizedBox(
                     height: 13,
                   ),
-                  LabelWithTextFeildNewCart(
+                  LabelWithTextFeild(
                     label: 'CVV',
                     hintText: 'Enter CVV',
                     icon: Icons.password,
