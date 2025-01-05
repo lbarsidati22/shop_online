@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/models/add_to_cart_model.dart';
+import 'package:shop_online/models/loaction_item_model.dart';
 import 'package:shop_online/models/payment_cart_model.dart';
 
 part 'checkout_state.dart';
@@ -23,7 +24,11 @@ class CheckoutCubit extends Cubit<CheckoutState> {
     final PaymentCartModel? chosenPaymentCards = dummyPaymentCard.firstWhere(
         (element) => element.isChosen == true,
         orElse: () => dummyPaymentCard.first);
+    final LoactionItemModel chosenAddress = dummyLocations.firstWhere(
+        (location) => location.isChosen == true,
+        orElse: () => dummyLocations.first);
     emit(CheckoutLoaded(
+      chosenAdderss: chosenAddress,
       chosenPaymentCards: chosenPaymentCards,
       cartItems: cartItems,
       totalAmount: subtotla + 10,

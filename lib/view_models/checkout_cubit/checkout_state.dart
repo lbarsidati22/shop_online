@@ -19,8 +19,10 @@ final class CheckoutLoaded extends CheckoutState {
   final double totalAmount;
   final int numOfPrudacts;
   final PaymentCartModel? chosenPaymentCards;
+  final LoactionItemModel? chosenAdderss;
 
   CheckoutLoaded({
+    this.chosenAdderss,
     this.chosenPaymentCards,
     required this.cartItems,
     required this.totalAmount,

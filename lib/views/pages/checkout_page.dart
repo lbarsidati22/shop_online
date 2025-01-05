@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_online/models/loaction_item_model.dart';
 import 'package:shop_online/models/payment_cart_model.dart';
 import 'package:shop_online/utils/app_colors.dart';
+import 'package:shop_online/utils/app_routes.dart';
 import 'package:shop_online/view_models/add_new_card_cubit/payment_mothods_cubit.dart';
 import 'package:shop_online/view_models/checkout_cubit/checkout_cubit.dart';
 import 'package:shop_online/views/pages/empty_shopping_peyment.dart';
@@ -43,6 +45,50 @@ class CheckoutPage extends StatelessWidget {
     }
   }
 
+  Widget buildShippingItem(LoactionItemModel? chosenAddress, context) {
+    if (chosenAddress != null) {
+      return Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: CachedNetworkImage(
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+              imageUrl: chosenAddress.imgUrl,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                chosenAddress.city,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                '${chosenAddress.city} - ${chosenAddress.country}',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: AppColors.grey,
+                    ),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return EmptyShoppingPeyment(
+        isPayment: false,
+        title: 'Add Shopping Address',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -76,6 +122,7 @@ class CheckoutPage extends StatelessWidget {
               } else if (state is CheckoutLoaded) {
                 final cartItems = state.cartItems;
                 final chosenPaymentCards = state.chosenPaymentCards;
+                final chosenAddress = state.chosenAdderss;
                 return SafeArea(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -85,15 +132,18 @@ class CheckoutPage extends StatelessWidget {
                         children: [
                           CheckoutHeadlinsItem(
                             title: 'Address',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushNamed(AppRoutes.choseLocationRoute)
+                                  .then((value) {
+                                cubit.getCartItems();
+                              });
+                            },
                           ),
                           SizedBox(
                             height: 16,
                           ),
-                          EmptyShoppingPeyment(
-                            isPayment: false,
-                            title: 'Add Shopping Address',
-                          ),
+                          buildShippingItem(chosenAddress, context),
                           SizedBox(
                             height: 16,
                           ),

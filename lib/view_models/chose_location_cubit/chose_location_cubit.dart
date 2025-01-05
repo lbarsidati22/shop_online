@@ -5,6 +5,7 @@ part 'chose_location_state.dart';
 
 class ChoseLocationCubit extends Cubit<ChoseLocationState> {
   ChoseLocationCubit() : super(ChoseLocationInitial());
+  String selectedLoactionID = dummyLocations.first.id;
 
   void fetchLocations() {
     emit(FetchingLocations());
@@ -25,6 +26,35 @@ class ChoseLocationCubit extends Cubit<ChoseLocationState> {
       dummyLocations.add(locationItem);
       emit(LocationAded());
       emit(FetchedLocations(dummyLocations));
+    });
+  }
+
+  void selectLocation(String id) {
+    selectedLoactionID = id;
+    final chosenLocation = dummyLocations
+        .firstWhere((location) => location.id == selectedLoactionID);
+
+    emit(LocationChosen(chosenLocation));
+  }
+
+  void confirmAddress() {
+    emit(ConfirmAddressLeading());
+    Future.delayed(Duration(seconds: 1), () {
+      var chosenAddress = dummyLocations
+          .firstWhere((location) => location.id == selectedLoactionID);
+      var previousAddress = dummyLocations.firstWhere(
+          (location) => location.isChosen == true,
+          orElse: () => dummyLocations.first);
+      previousAddress = previousAddress.copyWith(isChosen: false);
+      chosenAddress = chosenAddress.copyWith(isChosen: true);
+      final previouseIndex = dummyLocations
+          .indexWhere((location) => location.id == previousAddress.id);
+      final chosenIndex = dummyLocations
+          .indexWhere((location) => location.id == chosenAddress.id);
+      dummyLocations[previouseIndex] = previousAddress;
+      dummyLocations[chosenIndex] = chosenAddress;
+
+      emit(ConfirmAddressLoaded());
     });
   }
 }
