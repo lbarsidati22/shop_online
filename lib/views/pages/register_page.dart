@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/utils/app_colors.dart';
 import 'package:shop_online/utils/app_routes.dart';
+import 'package:shop_online/view_models/auth_cubit/auth_cubit.dart';
 import 'package:shop_online/views/widgets/label_with_text_feild.dart';
 import 'package:shop_online/views/widgets/main_bottom.dart';
 import 'package:shop_online/views/widgets/social_media_bottom.dart';
@@ -21,6 +23,7 @@ class _LoginPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final cubit = BlocProvider.of<AuthCubit>(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -77,12 +80,40 @@ class _LoginPageState extends State<RegisterPage> {
                     controller: passwordController,
                   ),
                   SizedBox(height: 16),
-                  MainBottom(
-                    text: 'Register',
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
+                  BlocConsumer<AuthCubit, AuthState>(
+                    listenWhen: (previous, current) =>
+                        current is AuthDone || current is AuthError,
+                    listener: (context, state) {
+                      if (state is AuthDone) {
                         Navigator.of(context).pushNamed(AppRoutes.homeRoute);
+                      } else if (state is AuthError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.message),
+                          ),
+                        );
                       }
+                    },
+                    bloc: cubit,
+                    buildWhen: (previous, current) =>
+                        current is AuthError ||
+                        current is AuthDone ||
+                        current is AuthLeading,
+                    builder: (context, state) {
+                      if (state is AuthLeading) {
+                        MainBottom(
+                          isLeading: true,
+                        );
+                      }
+                      return MainBottom(
+                        text: 'Create Account',
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await cubit.registerWithEmailAndPassword(
+                                emailController.text, passwordController.text);
+                          }
+                        },
+                      );
                     },
                   ),
                   SizedBox(height: 8),

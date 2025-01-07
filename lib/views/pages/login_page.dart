@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/utils/app_colors.dart';
 import 'package:shop_online/utils/app_routes.dart';
+import 'package:shop_online/view_models/auth_cubit/auth_cubit.dart';
 import 'package:shop_online/views/widgets/label_with_text_feild.dart';
 import 'package:shop_online/views/widgets/main_bottom.dart';
 import 'package:shop_online/views/widgets/social_media_bottom.dart';
@@ -20,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final cubit = BlocProvider.of<AuthCubit>(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -78,12 +81,40 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  MainBottom(
-                    text: 'Login',
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
+                  BlocConsumer<AuthCubit, AuthState>(
+                    bloc: cubit,
+                    listenWhen: (previous, current) =>
+                        current is AuthDone || current is AuthError,
+                    listener: (context, state) {
+                      if (state is AuthDone) {
                         Navigator.of(context).pushNamed(AppRoutes.homeRoute);
+                      } else if (state is AuthError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.message),
+                          ),
+                        );
                       }
+                    },
+                    buildWhen: (previous, current) =>
+                        current is AuthLeading ||
+                        current is AuthError ||
+                        current is AuthDone,
+                    builder: (context, state) {
+                      if (state is AuthLeading) {
+                        return MainBottom(
+                          isLeading: true,
+                        );
+                      }
+                      return MainBottom(
+                        text: 'Login',
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await cubit.loginWithEmailAndPassword(
+                                emailController.text, passwordController.text);
+                          }
+                        },
+                      );
                     },
                   ),
                   SizedBox(height: 8),
