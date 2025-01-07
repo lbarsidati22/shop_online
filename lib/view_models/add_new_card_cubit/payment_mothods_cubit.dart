@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_online/models/add_to_cart_model.dart';
 import 'package:shop_online/models/payment_cart_model.dart';
 
 part 'payment_methods_state.dart';

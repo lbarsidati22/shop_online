@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:shop_online/utils/app_colors.dart';
-import 'package:shop_online/utils/app_router.dart';
 import 'package:shop_online/utils/app_routes.dart';
 import 'package:shop_online/view_models/cart_cubit/cart_cubit.dart';
 import 'package:shop_online/views/widgets/cart_item_widget.dart';

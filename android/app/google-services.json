@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "74076396934",
+    "project_id": "chop-online",
+    "storage_bucket": "chop-online.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74076396934:android:1f0d8ba01e9f507a14e007",
+        "android_client_info": {
+          "package_name": "com.example.shop_online"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqpi300f28I8VwnhDbKGYEgSJknzw1luU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

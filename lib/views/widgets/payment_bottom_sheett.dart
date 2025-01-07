@@ -11,7 +11,7 @@ class PaymentBottomSheett extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     final paymentMethodCubit = BlocProvider.of<PaymentMethodsCubit>(context);
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 16),

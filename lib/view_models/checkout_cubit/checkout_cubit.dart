@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/models/add_to_cart_model.dart';
 import 'package:shop_online/models/loaction_item_model.dart';
@@ -21,6 +20,7 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       0,
       (previuseValue, element) => previuseValue + element.quantity,
     );
+    // ignore: unnecessary_nullable_for_final_variable_declarations
     final PaymentCartModel? chosenPaymentCards = dummyPaymentCard.firstWhere(
         (element) => element.isChosen == true,
         orElse: () => dummyPaymentCard.first);

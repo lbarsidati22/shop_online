@@ -2,11 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-import 'package:shop_online/models/home_carousel_item_model.dart';
-import 'package:shop_online/models/prudact_item_model.dart';
 import 'package:shop_online/utils/app_routes.dart';
 import 'package:shop_online/view_models/home_cobit/home_cubit.dart';
-import 'package:shop_online/views/pages/home_page.dart';
 import 'package:shop_online/views/widgets/prudact_item.dart';
 
 class HomeTabView extends StatelessWidget {

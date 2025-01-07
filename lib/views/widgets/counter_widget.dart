@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shop_online/utils/app_colors.dart';
-import 'package:shop_online/view_models/prudact_details_cubit/prudact_details_cubit.dart';
 
 class CounterWidget extends StatelessWidget {
   final int value;

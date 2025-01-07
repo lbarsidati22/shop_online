@@ -21,20 +21,20 @@ class CheckoutPage extends StatelessWidget {
         paymentCart: chosenCard,
         onItemTap: () {
           showModalBottomSheet(
-                  context: context,
-                  builder: (_) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.65,
-                      width: double.infinity,
-                      child: BlocProvider(
-                        create: (context) =>
-                            PaymentMethodsCubit()..fetchPaymentMethod(),
-                        child: PaymentBottomSheett(),
-                      ),
-                    );
-                  })
-              .then((value) =>
-                  BlocProvider.of<CheckoutCubit>(context).getCartItems());
+              context: context,
+              builder: (_) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  width: double.infinity,
+                  child: BlocProvider(
+                    create: (context) =>
+                        PaymentMethodsCubit()..fetchPaymentMethod(),
+                    child: PaymentBottomSheett(),
+                  ),
+                );
+              }).then((value) =>
+              // ignore: use_build_context_synchronously
+              BlocProvider.of<CheckoutCubit>(context).getCartItems());
         },
       );
     } else {

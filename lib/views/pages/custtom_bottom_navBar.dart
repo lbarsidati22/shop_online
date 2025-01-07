@@ -1,9 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:shop_online/view_models/cart_cubit/cart_cubit.dart';
-import 'package:shop_online/view_models/home_cobit/home_cubit.dart';
 import 'package:shop_online/views/pages/favorite_page.dart';
 import 'package:shop_online/views/pages/home_page.dart';
 import 'package:shop_online/views/pages/cart_page.dart';
