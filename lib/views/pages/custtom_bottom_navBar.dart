@@ -72,6 +72,7 @@ class _CusttomBottomNavbarPageState extends State<CusttomBottomNavbarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: currentIndex != 0 ? true : false,
         leading: Padding(
           padding: const EdgeInsets.all(4.0),
           child: CircleAvatar(
