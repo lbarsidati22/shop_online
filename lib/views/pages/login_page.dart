@@ -142,11 +142,40 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  SocialMediaBottom(
-                    imgUrl:
-                        'https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png',
-                    text: 'Login with Google',
-                    onTap: () {},
+                  BlocConsumer<AuthCubit, AuthState>(
+                    bloc: cubit,
+                    listenWhen: (previous, current) =>
+                        current is GoogleAuthError || current is GoogleAuthDnoe,
+                    listener: (context, state) {
+                      if (state is GoogleAuthDnoe) {
+                        Navigator.of(context).pushNamed(AppRoutes.homeRoute);
+                      } else if (state is GoogleAuthError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.message),
+                          ),
+                        );
+                      }
+                    },
+                    buildWhen: (previous, current) =>
+                        current is GoogleAuthError ||
+                        current is GoogleAuthDnoe ||
+                        current is GoogleAuthentitating,
+                    builder: (context, state) {
+                      if (state is GoogleAuthentitating) {
+                        SocialMediaBottom(
+                          isLeading: true,
+                        );
+                      }
+                      return SocialMediaBottom(
+                        imgUrl:
+                            'https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png',
+                        text: 'Login with Google',
+                        onTap: () async {
+                          cubit.authenticateWithGoogle();
+                        },
+                      );
+                    },
                   ),
                   SizedBox(height: 10),
                   SocialMediaBottom(

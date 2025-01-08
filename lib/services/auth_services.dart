@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class AuthServices {
   Future<bool> loginWithEmailAndPassword(String email, String password);
   Future<bool> registerWithEmailAndPassword(String email, String password);
+  Future<bool> authWithGoogle();
   User? currentUser();
   Future<void> logout();
 }
@@ -43,5 +45,21 @@ class AuthSrevicesImpl implements AuthServices {
   @override
   Future<void> logout() async {
     await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<bool> authWithGoogle() async {
+    final gUser = await GoogleSignIn().signIn();
+    final gAuth = await gUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth?.accessToken,
+      idToken: gAuth?.idToken,
+    );
+    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+    if (userCredential.user != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

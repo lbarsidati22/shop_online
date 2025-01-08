@@ -25,3 +25,13 @@ final class AuthLogeOutError extends AuthState {
 
   AuthLogeOutError(this.message);
 }
+
+final class GoogleAuthentitating extends AuthState {}
+
+final class GoogleAuthError extends AuthState {
+  final String message;
+
+  GoogleAuthError(this.message);
+}
+
+final class GoogleAuthDnoe extends AuthState {}
