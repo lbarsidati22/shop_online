@@ -68,16 +68,24 @@ class AuthCubit extends Cubit<AuthState> {
       if (result) {
         emit(GoogleAuthDnoe());
       } else {
-        emit(
-          GoogleAuthError('Google authentication faild'),
-        );
+        emit(GoogleAuthError('Google authentication faild'));
       }
     } catch (e) {
-      emit(
-        GoogleAuthError(
-          e.toString(),
-        ),
-      );
+      emit(GoogleAuthError(e.toString()));
+    }
+  }
+
+  Future<void> authenticateWithFacebook() async {
+    emit(FacebookAuthentitating());
+    try {
+      final result = await authServices.authWithFacebook();
+      if (result) {
+        emit(FacebookAuthDnoe());
+      } else {
+        emit(FacebookAuthError('Facebook authentication faild'));
+      }
+    } catch (e) {
+      emit(FacebookAuthError(e.toString()));
     }
   }
 }

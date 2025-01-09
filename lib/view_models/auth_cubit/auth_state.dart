@@ -26,6 +26,7 @@ final class AuthLogeOutError extends AuthState {
   AuthLogeOutError(this.message);
 }
 
+//google auth state
 final class GoogleAuthentitating extends AuthState {}
 
 final class GoogleAuthError extends AuthState {
@@ -35,3 +36,14 @@ final class GoogleAuthError extends AuthState {
 }
 
 final class GoogleAuthDnoe extends AuthState {}
+
+//// facebook state
+final class FacebookAuthentitating extends AuthState {}
+
+final class FacebookAuthError extends AuthState {
+  final String message;
+
+  FacebookAuthError(this.message);
+}
+
+final class FacebookAuthDnoe extends AuthState {}

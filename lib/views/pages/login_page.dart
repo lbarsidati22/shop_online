@@ -178,11 +178,39 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   SizedBox(height: 10),
-                  SocialMediaBottom(
-                    imgUrl:
-                        'https://1000logos.net/wp-content/uploads/2017/02/Facebook-Logosu.png',
-                    text: 'Login with Facebook',
-                    onTap: () {},
+                  BlocConsumer<AuthCubit, AuthState>(
+                    bloc: cubit,
+                    listenWhen: (previous, current) =>
+                        current is FacebookAuthDnoe ||
+                        current is FacebookAuthError,
+                    listener: (context, state) {
+                      if (state is FacebookAuthDnoe) {
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed(AppRoutes.homeRoute);
+                      } else if (state is FacebookAuthError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message)));
+                      }
+                    },
+                    buildWhen: (previous, current) =>
+                        current is FacebookAuthDnoe ||
+                        current is FacebookAuthError ||
+                        current is FacebookAuthentitating,
+                    builder: (context, state) {
+                      if (state is FacebookAuthentitating) {
+                        SocialMediaBottom(
+                          isLeading: true,
+                        );
+                      }
+                      return SocialMediaBottom(
+                        imgUrl:
+                            'https://1000logos.net/wp-content/uploads/2017/02/Facebook-Logosu.png',
+                        text: 'Login with Facebook',
+                        onTap: () async {
+                          cubit.authenticateWithFacebook();
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
