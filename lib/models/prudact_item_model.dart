@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 enum PrudactSize {
   S,
   M,
@@ -47,6 +49,33 @@ class PrudactItemModel {
       isFavorite: isFavorite ?? this.isFavorite,
       category: category ?? this.category,
       avrageRate: avrageRate ?? this.avrageRate,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'id': id,
+      'imgUrl': imgUrl,
+      'description': description,
+      'price': price,
+      'isFavorite': isFavorite,
+      'category': category,
+      'avrageRate': avrageRate,
+    };
+  }
+
+  factory PrudactItemModel.fromMap(
+      Map<String, dynamic> map, String documentId) {
+    return PrudactItemModel(
+      name: map['name'] ?? '',
+      id: documentId,
+      imgUrl: map['imgUrl'] ?? '',
+      description: map['description'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      isFavorite: map['isFavorite'] ?? false,
+      category: map['category'] ?? '',
+      avrageRate: map['avrageRate']?.toDouble() ?? 0.0,
     );
   }
 }

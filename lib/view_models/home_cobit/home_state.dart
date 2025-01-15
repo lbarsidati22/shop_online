@@ -19,7 +19,7 @@ final class Homeloaded extends HomeState {
 final class HomeError extends HomeState {
   final String error;
 
-  HomeError({
-    required this.error,
-  });
+  HomeError(
+    this.error,
+  );
 }
