@@ -1,11 +1,23 @@
-import 'dart:convert';
-
 enum PrudactSize {
   S,
   M,
   L,
-  // ignore: constant_identifier_names
-  XL,
+  XL;
+
+  static PrudactSize formString(String size) {
+    switch (size.toUpperCase()) {
+      case 'S':
+        return PrudactSize.S;
+      case 'M':
+        return PrudactSize.M;
+      case 'L':
+        return PrudactSize.L;
+      case 'XL':
+        return PrudactSize.XL;
+      default:
+        return PrudactSize.S;
+    }
+  }
 }
 
 class PrudactItemModel {
@@ -65,11 +77,10 @@ class PrudactItemModel {
     };
   }
 
-  factory PrudactItemModel.fromMap(
-      Map<String, dynamic> map, String documentId) {
+  factory PrudactItemModel.fromMap(Map<String, dynamic> map) {
     return PrudactItemModel(
       name: map['name'] ?? '',
-      id: documentId,
+      id: map['id'] ?? '',
       imgUrl: map['imgUrl'] ?? '',
       description: map['description'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,

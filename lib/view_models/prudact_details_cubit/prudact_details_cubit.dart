@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/models/add_to_cart_model.dart';
 import 'package:shop_online/models/prudact_item_model.dart';
+import 'package:shop_online/services/auth_services.dart';
 import 'package:shop_online/services/prudact_details_services.dart';
 
 part 'prudact_details_state.dart';
@@ -8,6 +9,7 @@ part 'prudact_details_state.dart';
 class PrudactDetailsCubit extends Cubit<PrudactDetailsState> {
   PrudactDetailsCubit() : super(PrudactDetailsInitial());
   final prudactDeatilsServices = PrudactDetailsSrevicesImpl();
+  final authServices = AuthSrevicesImpl();
   PrudactSize? selectedSize;
   int quantity = 1;
   void getPrudactDetails(String id) async {
@@ -52,17 +54,22 @@ class PrudactDetailsCubit extends Cubit<PrudactDetailsState> {
     emit(SizeSelected(size: size));
   }
 
-  void addToCart(String prudactId) {
+  Future<void> addToCart(String prudactId) async {
     emit(PrudactAddingToCart());
-    final cartItem = AddToCartModel(
-      id: DateTime.now().toIso8601String(),
-      prudact: dummyProducts.firstWhere((item) => item.id == prudactId),
-      size: selectedSize!,
-      quantity: quantity,
-    );
-    dummyCart.add(cartItem);
-    Future.delayed((Duration(seconds: 1)), () {
+    try {
+      final selectedPrudact =
+          await prudactDeatilsServices.fetchPrudactDetails(prudactId);
+      final currentUser = authServices.currentUser();
+      final cartItem = AddToCartModel(
+        id: DateTime.now().toIso8601String(),
+        prudact: selectedPrudact,
+        size: selectedSize!,
+        quantity: quantity,
+      );
+      await prudactDeatilsServices.addToCart(cartItem, currentUser!.uid);
       emit(PrudactAdedToCart(prudactId: prudactId));
-    });
+    } catch (e) {
+      emit(PrudactAddToCartError(e.toString()));
+    }
   }
 }

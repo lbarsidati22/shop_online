@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
 import 'package:shop_online/utils/app_colors.dart';
 
 class CategoryModel {
@@ -14,6 +17,26 @@ class CategoryModel {
     required this.prudactCount,
     this.bgColor = AppColors.prymaryColor,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'prudactCount': prudactCount,
+      'bgColor': bgColor.value,
+      'textColor': textColor.value,
+    };
+  }
+
+  factory CategoryModel.fromMap(Map<String, dynamic> map) {
+    return CategoryModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      prudactCount: map['prudactCount']?.toInt() ?? 0,
+      bgColor: Color(map['bgColor']),
+      textColor: Color(map['textColor']),
+    );
+  }
 }
 
 List<CategoryModel> dummyCategories = [

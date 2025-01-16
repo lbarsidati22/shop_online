@@ -45,3 +45,9 @@ final class PrudactAdedToCart extends PrudactDetailsState {
 }
 
 final class PrudactAddingToCart extends PrudactDetailsState {}
+
+final class PrudactAddToCartError extends PrudactDetailsState {
+  final String message;
+
+  PrudactAddToCartError(this.message);
+}

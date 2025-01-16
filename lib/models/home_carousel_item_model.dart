@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class HomeCarouselItemModel {
   final String imgUrl;
   final String id;
@@ -5,6 +7,20 @@ class HomeCarouselItemModel {
     required this.imgUrl,
     required this.id,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'imgUrl': imgUrl,
+      'id': id,
+    };
+  }
+
+  factory HomeCarouselItemModel.fromMap(Map<String, dynamic> map) {
+    return HomeCarouselItemModel(
+      imgUrl: map['imgUrl'] ?? '',
+      id: map['id'] ?? '',
+    );
+  }
 }
 
 List<HomeCarouselItemModel> dummyHomeCarouselItems = [
