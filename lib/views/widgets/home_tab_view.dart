@@ -14,6 +14,10 @@ class HomeTabView extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return BlocBuilder<HomeCubit, HomeState>(
       bloc: BlocProvider.of<HomeCubit>(context),
+      buildWhen: (previous, current) =>
+          current is HomeError ||
+          current is Homeloaded ||
+          current is HomeLeading,
       builder: (context, state) {
         if (state is HomeLeading) {
           return Center(

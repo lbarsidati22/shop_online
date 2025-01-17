@@ -71,7 +71,7 @@ class PrudactItemModel {
       'imgUrl': imgUrl,
       'description': description,
       'price': price,
-      'isFavorite': isFavorite,
+      // 'isFavorite': isFavorite,
       'category': category,
       'avrageRate': avrageRate,
     };
@@ -84,7 +84,7 @@ class PrudactItemModel {
       imgUrl: map['imgUrl'] ?? '',
       description: map['description'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
-      isFavorite: map['isFavorite'] ?? false,
+      //  isFavorite: map['isFavorite'] ?? false,
       category: map['category'] ?? '',
       avrageRate: map['avrageRate']?.toDouble() ?? 0.0,
     );
