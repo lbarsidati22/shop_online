@@ -33,6 +33,14 @@ final class QuantityCounterLoaded extends CartState {
   });
 }
 
+final class QuantityCounterLeading extends CartState {}
+
+final class QuantityCounterError extends CartState {
+  final String message;
+
+  QuantityCounterError(this.message);
+}
+
 final class SubtotalUpdated extends CartState {
   final double subtotal;
 

@@ -1,54 +1,74 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_online/models/add_to_cart_model.dart';
+import 'package:shop_online/services/auth_services.dart';
+import 'package:shop_online/services/cart_services.dart';
 
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
-  int quantity = 1;
-  void getCartsItems() {
-    emit(CartLeading());
+  final cartServices = CartServicesEmpl();
+  final authServices = AuthSrevicesImpl();
 
-    emit(CartLoaded(_subtotal, dummyCart));
+  int quantity = 1;
+  Future<void> getCartsItems() async {
+    emit(CartLeading());
+    try {
+      final currentUser = authServices.currentUser();
+      final cartItems = await cartServices.fetchCartItems(currentUser!.uid);
+
+      emit(CartLoaded(_subtotal(cartItems), cartItems));
+    } catch (e) {}
+    //  emit(CartLoaded(_subtotal, dummyCart));
   }
 
-  void incrementCounter(String prudactId, [int? initialValue]) {
+  Future<void> incrementCounter(AddToCartModel cartItem,
+      [int? initialValue]) async {
     if (initialValue != null) {
       quantity = initialValue;
     }
     quantity++;
-    final index = dummyCart.indexWhere(
-      (item) => item.prudact.id == prudactId,
-    );
-    dummyCart[index] = dummyCart[index].copyWith(
-      quantity: quantity,
-    );
 
-    emit(QuantityCounterLoaded(value: quantity, prudactId: prudactId));
-    emit(SubtotalUpdated(subtotal: _subtotal));
+    try {
+      emit(QuantityCounterLeading());
+      final currentUser = authServices.currentUser();
+      final updatedCartItem = cartItem.copyWith(quantity: quantity);
+      await cartServices.setCartItem(currentUser!.uid, updatedCartItem);
+
+      emit(QuantityCounterLoaded(
+          value: quantity, prudactId: updatedCartItem.prudact.id));
+      final cartItems = await cartServices.fetchCartItems(currentUser!.uid);
+      emit(SubtotalUpdated(subtotal: _subtotal(cartItems)));
+    } catch (e) {
+      emit(QuantityCounterError(e.toString()));
+    }
   }
 
-  void decrementCounter(String prudactId, [int? initialValue]) {
+  Future<void> decrementCounter(AddToCartModel cartItem,
+      [int? initialValue]) async {
     if (initialValue != null) {
       quantity = initialValue;
     }
     if (quantity > 1) {
       quantity--;
     }
+    try {
+      emit(QuantityCounterLeading());
+      final currentUser = authServices.currentUser();
+      final updatedCartItem = cartItem.copyWith(quantity: quantity);
+      await cartServices.setCartItem(currentUser!.uid, updatedCartItem);
 
-    final index = dummyCart.indexWhere(
-      (item) => item.prudact.id == prudactId,
-    );
-    dummyCart[index] = dummyCart[index].copyWith(
-      quantity: quantity,
-    );
-
-    emit(QuantityCounterLoaded(value: quantity, prudactId: prudactId));
-    emit(SubtotalUpdated(subtotal: _subtotal));
+      emit(QuantityCounterLoaded(
+          value: quantity, prudactId: updatedCartItem.prudact.id));
+      final cartItems = await cartServices.fetchCartItems(currentUser!.uid);
+      emit(SubtotalUpdated(subtotal: _subtotal(cartItems)));
+    } catch (e) {
+      emit(QuantityCounterError(e.toString()));
+    }
   }
 
-  double get _subtotal => dummyCart.fold<double>(
+  double _subtotal(List<AddToCartModel> cartItems) => cartItems.fold<double>(
       0,
-      (previuseValue, item) =>
-          previuseValue + (item.prudact.price * item.quantity));
+      (previousValue, item) =>
+          previousValue + (item.prudact.price * item.quantity));
 }

@@ -67,7 +67,7 @@ class CartItemWidget extends StatelessWidget {
                           CounterWidget(
                             value: state.value,
                             cubit: cubit,
-                            prudactId: cartItem.prudact.id,
+                            cartItem: cartItem,
                           ),
                           Text(
                             '\$${state.value * cartItem.prudact.price}',
@@ -88,7 +88,7 @@ class CartItemWidget extends StatelessWidget {
                           initialValue: cartItem.quantity,
                           value: cartItem.quantity,
                           cubit: cubit,
-                          prudactId: cartItem.prudact.id,
+                          cartItem: cartItem,
                         ),
                         Text(
                           '\$${cartItem.totalPrice.toStringAsFixed(1)}',
