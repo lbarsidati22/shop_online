@@ -16,6 +16,8 @@ class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
   Widget buildPaymentMethod(
       PaymentCartModel? chosenCard, BuildContext context) {
+    final checkoutCubit = BlocProvider.of<CheckoutCubit>(context);
+    final paymentMethodsCubit = BlocProvider.of<PaymentMethodsCubit>(context);
     if (chosenCard != null) {
       return PaymentMethodItem(
         paymentCart: chosenCard,
@@ -32,9 +34,9 @@ class CheckoutPage extends StatelessWidget {
                     child: PaymentBottomSheett(),
                   ),
                 );
-              }).then((value) =>
-              // ignore: use_build_context_synchronously
-              BlocProvider.of<CheckoutCubit>(context).getCartItems());
+              }).then((value) async {
+            await checkoutCubit.getCartItems();
+          });
         },
       );
     } else {
@@ -91,12 +93,19 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final cubit = CheckoutCubit();
-        cubit.getCartItems();
-        return cubit;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            final cubit = CheckoutCubit();
+            cubit.getCartItems();
+            return cubit;
+          },
+        ),
+        BlocProvider(
+          create: (context) => PaymentMethodsCubit(),
+        )
+      ],
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -135,8 +144,8 @@ class CheckoutPage extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context, rootNavigator: true)
                                   .pushNamed(AppRoutes.choseLocationRoute)
-                                  .then((value) {
-                                cubit.getCartItems();
+                                  .then((value) async {
+                                await cubit.getCartItems();
                               });
                             },
                           ),

@@ -105,11 +105,10 @@ class PaymentBottomSheett extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.of(context, rootNavigator: true)
-                    .pushNamed(
-                      AppRoutes.addNewCartRoute,
-                    )
-                    .then((onValue) =>
-                        PaymentMethodsCubit().fetchPaymentMethod());
+                    .pushNamed(AppRoutes.addNewCartRoute,
+                        arguments: paymentMethodCubit)
+                    .then((onValue) async =>
+                        await paymentMethodCubit.fetchPaymentMethod());
               },
               child: Card(
                 color: AppColors.white,

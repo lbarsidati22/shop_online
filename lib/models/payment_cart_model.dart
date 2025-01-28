@@ -32,6 +32,28 @@ class PaymentCartModel {
       isChosen: isChosen ?? this.isChosen,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'cardNumber': cardNumber,
+      'cardHolderName': cardHolderName,
+      'expiryDate': expiryDate,
+      'cvv': cvv,
+      'isChosen': isChosen,
+    };
+  }
+
+  factory PaymentCartModel.fromMap(Map<String, dynamic> map) {
+    return PaymentCartModel(
+      id: map['id'] ?? '',
+      cardNumber: map['cardNumber'] ?? '',
+      cardHolderName: map['cardHolderName'] ?? '',
+      expiryDate: map['expiryDate'] ?? '',
+      cvv: map['cvv'] ?? '',
+      isChosen: map['isChosen'] ?? false,
+    );
+  }
 }
 
 List<PaymentCartModel> dummyPaymentCard = [
