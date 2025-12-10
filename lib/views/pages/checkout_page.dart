@@ -17,7 +17,7 @@ class CheckoutPage extends StatelessWidget {
   Widget buildPaymentMethod(
       PaymentCartModel? chosenCard, BuildContext context) {
     final checkoutCubit = BlocProvider.of<CheckoutCubit>(context);
-    final paymentMethodsCubit = BlocProvider.of<PaymentMethodsCubit>(context);
+   // final paymentMethodsCubit = BlocProvider.of<PaymentMethodsCubit>(context);
     if (chosenCard != null) {
       return PaymentMethodItem(
         paymentCart: chosenCard,

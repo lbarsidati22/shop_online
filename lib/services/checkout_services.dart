@@ -1,4 +1,3 @@
-import 'package:shop_online/models/add_to_cart_model.dart';
 import 'package:shop_online/models/payment_cart_model.dart';
 import 'package:shop_online/services/firestor_services.dart';
 import 'package:shop_online/utils/api_paths.dart';

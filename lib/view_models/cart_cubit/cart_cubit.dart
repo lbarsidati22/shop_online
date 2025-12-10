@@ -37,7 +37,7 @@ class CartCubit extends Cubit<CartState> {
 
       emit(QuantityCounterLoaded(
           value: quantity, prudactId: updatedCartItem.prudact.id));
-      final cartItems = await cartServices.fetchCartItems(currentUser!.uid);
+      final cartItems = await cartServices.fetchCartItems(currentUser.uid);
       emit(SubtotalUpdated(subtotal: _subtotal(cartItems)));
     } catch (e) {
       emit(QuantityCounterError(e.toString()));
@@ -60,7 +60,7 @@ class CartCubit extends Cubit<CartState> {
 
       emit(QuantityCounterLoaded(
           value: quantity, prudactId: updatedCartItem.prudact.id));
-      final cartItems = await cartServices.fetchCartItems(currentUser!.uid);
+      final cartItems = await cartServices.fetchCartItems(currentUser.uid);
       emit(SubtotalUpdated(subtotal: _subtotal(cartItems)));
     } catch (e) {
       emit(QuantityCounterError(e.toString()));

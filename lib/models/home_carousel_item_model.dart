@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class HomeCarouselItemModel {
   final String imgUrl;
